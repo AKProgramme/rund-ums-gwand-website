@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://akprogramme.github.io/rund-ums-gwand/sitemap.xml
