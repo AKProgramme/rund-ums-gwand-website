@@ -410,6 +410,51 @@ footer{flex-direction:column;align-items:center;text-align:center;gap:8px;margin
 .w-opts small{color:var(--muted);font-size:.9rem}
 .w-note{font-size:.85rem;color:var(--muted)}
 
+/* Infofenster am Status + Besuchsleiste */
+.status{cursor:pointer;font-family:var(--body);color:var(--ink);transition:border-color .2s,background .2s}
+.status:hover{border-color:var(--ink)}
+.status::after{content:"";width:6px;height:6px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:translateY(-2px) rotate(45deg);opacity:.6;transition:transform .2s;margin-left:2px}
+.status[aria-expanded="true"]{border-color:var(--ink)}
+.status[aria-expanded="true"]::after{transform:translateY(1px) rotate(-135deg)}
+.actions{position:relative}
+.info-pop{position:absolute;right:0;top:calc(100% + 12px);width:min(390px,calc(100vw - 32px));background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 30px 60px -30px rgba(31,12,44,.55);padding:22px;display:grid;gap:16px;z-index:60;text-align:left}
+.info-pop:not([hidden]){animation:popIn .22s cubic-bezier(.2,.7,.2,1)}
+@keyframes popIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.pop-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pop-live{display:flex;align-items:center;gap:10px;font-weight:600}
+.pop-live i,.vlive i{width:10px;height:10px;border-radius:50%;background:var(--muted);flex:none}
+.pop-live.open i,.vlive.open i{background:var(--open);box-shadow:0 0 0 4px color-mix(in srgb,var(--open) 18%,transparent)}
+.pop-x{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--pearl);color:var(--ink);font-size:1.2rem;line-height:1;cursor:pointer;flex:none}
+.pop-x:hover{border-color:var(--ink)}
+.info-pop table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.95rem}
+.info-pop td{padding:7px 0;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
+.info-pop td:last-child{text-align:right;font-family:var(--mono);font-size:.88rem}
+.info-pop tr.today td{font-weight:700}
+.info-pop tr.today td:first-child::after{content:" · " attr(data-t);font-weight:500;color:var(--rose)}
+.info-pop .closed{color:var(--muted)}
+.pop-addr{display:grid;gap:4px}
+.pop-addr strong{font-size:1.05rem}
+.pop-addr span{color:var(--muted);font-size:.95rem}
+.pop-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pop-btns .btn{min-height:44px;padding:8px 12px;font-size:.92rem}
+.pop-btns .btn:first-child{grid-column:1/-1}
+.visit{background:var(--paper);border-bottom:1px solid var(--line);padding-block:clamp(30px,4vw,48px)}
+.visit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,3vw,44px)}
+.visit-item{display:grid;justify-items:center;align-content:start;text-align:center;gap:8px;min-width:0}
+.visit-ic{width:48px;height:48px;border-radius:50%;background:var(--pearl);border:1px solid var(--line);display:grid;place-items:center;color:var(--rose);margin-bottom:4px}
+.visit-ic svg{width:22px;height:22px}
+.visit-item .big{font-family:var(--display);font-size:clamp(1.35rem,2.2vw,1.65rem);line-height:1.2;margin:0}
+.visit-item .sub{margin:0;color:var(--muted)}
+.vlive{display:block;font-weight:600;margin:0;max-width:34ch;text-wrap:balance}.vlive i{display:inline-block;vertical-align:middle;margin:-3px 8px 0 0}
+.vhours{display:grid;gap:3px;margin:0;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.95rem}
+.vhours b{color:var(--ink);font-weight:600}
+.visit .row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:6px}
+@media (max-width:820px){.visit-grid{grid-template-columns:1fr;gap:0}.visit-item{padding-block:22px;border-bottom:1px solid var(--line)}.visit-item:first-child{padding-top:4px}.visit-item:last-child{border-bottom:0;padding-bottom:0}}
+
+.rinfo{margin-top:18px;padding:14px 16px;border-radius:12px;background:var(--pearl);border:1px solid var(--line);border-left:3px solid var(--rose);text-align:left;font-family:var(--body)}
+.rinfo strong{display:block;font-size:.9rem;margin-bottom:4px;color:var(--ink)}
+.rinfo p{margin:0;font-size:.88rem;line-height:1.5;color:var(--muted)}
+
 /* Rechtliches */
 .legal{position:fixed;inset:0;z-index:100;background:rgba(31,12,44,.62);overflow-y:auto;padding:max(16px,env(safe-area-inset-top,0px)) 16px max(16px,env(safe-area-inset-bottom,0px))}
 .legal-inner{position:relative;max-width:820px;margin:24px auto;background:var(--paper);color:var(--ink);border-radius:var(--r);padding:clamp(24px,5vw,56px);font-size:1rem;line-height:1.7}
@@ -432,7 +477,13 @@ footer{margin-top:80px;padding-block:26px;border-top:1px solid rgba(255,255,255,
     </nav>
     <div class="actions">
     <div class="lang lang-h" role="group" aria-label="Sprache · Language"><button type="button" data-l="de">DE</button><button type="button" data-l="by">BY</button><button type="button" data-l="en">EN</button></div>
-    <span class="status" id="statusPill"><i></i><span id="statusShort">Öffnungszeiten</span></span>
+    <button type="button" class="status" id="statusPill" aria-expanded="false" aria-controls="infoPop"><i></i><span id="statusShort">Öffnungszeiten</span></button>
+    <div class="info-pop" id="infoPop" role="dialog" aria-label="Öffnungszeiten und Adresse" hidden>
+      <div class="pop-head"><div class="pop-live" id="popLive"><i></i><span id="popLiveText">Öffnungszeiten</span></div><button type="button" class="pop-x" id="popX" aria-label="Schließen">×</button></div>
+      <table><tbody id="popHours"></tbody></table>
+      <div class="pop-addr"><strong>Rund ums Gwand</strong><span>Riesenburgstraße 24<br>81249 München-Aubing</span><span>0151 40355077</span></div>
+      <div class="pop-btns"><a class="btn small primary" href="https://www.google.com/maps/search/?api=1&amp;query=Rund+ums+Gwand+Riesenburgstra%C3%9Fe+24+81249+M%C3%BCnchen" target="_blank" rel="noopener">Route planen</a><a class="btn small" href="tel:+4915140355077">Anrufen</a><a class="btn small" href="https://wa.me/4915140355077" target="_blank" rel="noopener">WhatsApp</a></div>
+    </div>
     <a class="btn small primary wa-top" href="https://wa.me/4915140355077" target="_blank" rel="noopener">WhatsApp</a>
     <button class="btn small menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mnav">Menü</button>
     </div>
@@ -465,6 +516,31 @@ footer{margin-top:80px;padding-block:26px;border-top:1px solid rgba(255,255,255,
   <div class="iron-ui">
     <span class="chip"><span id="ironHint">Fahr über den Stoff und bügle ihn glatt</span> <span class="meter"><span id="meter"></span></span> <b id="pct">0 %</b></span>
     <button class="chip" id="reIron" type="button" hidden>Nochmal zerknittern</button>
+  </div>
+</section>
+
+<section class="visit" id="besuch" aria-label="Adresse und Öffnungszeiten">
+  <div class="wrap visit-grid">
+    <div class="visit-item">
+      <span class="visit-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></svg></span>
+      <p class="eyebrow">Hier findest du uns</p>
+      <p class="big">Riesenburgstraße 24</p>
+      <p class="sub">81249 München-Aubing</p>
+      <div class="row"><a class="btn small" href="https://www.google.com/maps/search/?api=1&amp;query=Rund+ums+Gwand+Riesenburgstra%C3%9Fe+24+81249+M%C3%BCnchen" target="_blank" rel="noopener">Route planen</a></div>
+    </div>
+    <div class="visit-item">
+      <span class="visit-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg></span>
+      <p class="eyebrow">Öffnungszeiten</p>
+      <p class="vlive" id="vLive"><i></i><span id="vLiveText">Öffnungszeiten</span></p>
+      <div class="vhours" id="vHours"></div>
+    </div>
+    <div class="visit-item">
+      <span class="visit-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.5l1.8 4.4-2.2 1.4a11 11 0 0 0 6.1 6.1l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5C10.6 20 4 13.4 3.5 5.6A1.5 1.5 0 0 1 5 4z"/></svg></span>
+      <p class="eyebrow">Ruf an oder schreib uns</p>
+      <p class="big">0151 40355077</p>
+      <p class="sub">Ohne Termin, einfach vorbeikommen.</p>
+      <div class="row"><a class="btn small primary" href="tel:+4915140355077">Anrufen</a><a class="btn small" href="https://wa.me/4915140355077" target="_blank" rel="noopener">WhatsApp</a></div>
+    </div>
   </div>
 </section>
 
@@ -556,9 +632,9 @@ footer{margin-top:80px;padding-block:26px;border-top:1px solid rgba(255,255,255,
           <ul id="rLines"></ul>
           <div class="sum"><span>Summe</span><b id="rSum">0,00 €</b></div>
           <span class="ex" id="rEx">Beispielauswahl, einfach ändern</span>
-          <p class="note">Unverbindliche Schätzung. Den genauen Preis bekommst du an der Theke.</p>
           <a class="btn primary" id="rWa" href="https://wa.me/4915140355077" target="_blank" rel="noopener">Per WhatsApp schicken</a>
           <button class="linkbtn" id="rClear" type="button">Schein leeren</button>
+          <div class="rinfo"><strong>Gut zu wissen</strong><p>Das ist nur eine Orientierung, kein fester Preis. Den endgültigen Preis legen wir im Laden fest, wenn wir dein Teil gesehen haben. Material, Flecken oder Besonderheiten können ihn noch verändern.</p></div>
         </div>
       </div>
     </div>
@@ -925,8 +1001,10 @@ const DICT={"Preise": ["Preise", "Prices"], "Spezialitäten": ["Spezialitätn", 
 const IN=n=>LANG==="en"?(ITEM_EN[n]||n):n;
 const CN=i=>LANG==="by"?CAT_BY[i]:LANG==="en"?CAT_EN[i]:CATS[i][0];
 const AB=()=>LANG==="en"?"from ":"ab ";
+Object.assign(DICT,{"Hier findest du uns":["Do findst uns","Find us"],"Öffnungszeiten":["Öffnungszeitn","Opening hours"],"Ruf an oder schreib uns":["Ruaf o oder schreib uns","Call or message us"],"Ohne Termin, einfach vorbeikommen.":["Ohne Termin, kimm oafach vorbei.","No appointment needed, just drop by."]});
+Object.assign(DICT,{"Gut zu wissen":["Guad zum Wissn","Good to know"],"Das ist nur eine Orientierung, kein fester Preis. Den endgültigen Preis legen wir im Laden fest, wenn wir dein Teil gesehen haben. Material, Flecken oder Besonderheiten können ihn noch verändern.":["Des is bloß zur Orientierung, koa fester Preis. Den endgültign Preis machan ma im Ladn aus, wenn ma dei Teil gseng hom. Material, Fleck oder Bsonderheitn kenna’n no verändern.","This is only a guide, not a fixed price. We set the final price in the shop once we’ve seen your item. Fabric, stains or special details can still change it."]});
 const HOOKS=[];const onLang=f=>HOOKS.push(f);
-const SKIP=new Set(["ironHint","tagNo","tagTitle","nowCat","statusShort","liveText","cTitle","cCount","lblDays","rSum","rNo","rDate","kitErr","cDoneText","menuBtn"]);
+const SKIP=new Set(["popLiveText","vLiveText","ironHint","tagNo","tagTitle","nowCat","statusShort","liveText","cTitle","cCount","lblDays","rSum","rNo","rDate","kitErr","cDoneText","menuBtn"]);
 let ORIG=null;
 function applyStatic(){
   if(!ORIG){ORIG=new Map();document.querySelectorAll("header *, main *").forEach(el=>{if(SKIP.has(el.id)||el.closest("svg,canvas,.lang,#allPrices,#tagList,#calcItems,#calcChips,#branchTiles,#cList,#hoursBody,#rLines"))return;const h=el.innerHTML.trim();if(DICT[h])ORIG.set(el,h)})}
@@ -986,7 +1064,27 @@ function renderHours(){
     return `<tr class="${d===s.d?"today":""}"><td data-t="${today}">${names[d]}</td><td>${t}</td></tr>`;
   }).join("");
 }
-renderHours();setInterval(renderHours,60000);onLang(renderHours);
+const SHORT={de:DAYS,by:DAYS,en:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]};
+function renderInfo(){
+  const s=status(), names=DN[LANG], today=L("heute","heid","today"), slot=d=>HOURS[d].length?HOURS[d].map(([a,b])=>`${hm(a)} – ${hm(b)}`).join(" · "):"";
+  $("popLive").classList.toggle("open",s.open);$("popLiveText").textContent=s.long;
+  $("vLive").classList.toggle("open",s.open);$("vLiveText").textContent=s.long;
+  $("popHours").innerHTML=ORDER.map(d=>{const t=slot(d).replace(" · ","<br>")||`<span class="closed">${L("geschlossen","zua","closed")}</span>`;
+    return `<tr class="${d===s.d?"today":""}"><td data-t="${today}">${names[d]}</td><td>${t}</td></tr>`}).join("");
+  const groups=[];ORDER.forEach(d=>{const k=slot(d),g=groups.find(x=>x.k===k);g?g.d.push(d):groups.push({k,d:[d]})});
+  $("vHours").innerHTML=groups.filter(g=>g.k).map(g=>`<span><b>${g.d.map(d=>SHORT[LANG][d]).join(", ")}</b> ${g.k}</span>`).join("")+
+    groups.filter(g=>!g.k).map(g=>`<span><b>${g.d.map(d=>SHORT[LANG][d]).join(", ")}</b> ${L("geschlossen","zua","closed")}</span>`).join("");
+}
+renderHours();renderInfo();setInterval(()=>{renderHours();renderInfo()},60000);onLang(renderHours);onLang(renderInfo);
+(function(){
+  const pill=$("statusPill"), pop=$("infoPop");
+  const set=o=>{pop.hidden=!o;pill.setAttribute("aria-expanded",o)};
+  pill.addEventListener("click",e=>{e.stopPropagation();set(pop.hidden)});
+  $("popX").addEventListener("click",()=>{set(false);pill.focus()});
+  document.addEventListener("click",e=>{if(!pop.hidden&&!pop.contains(e.target))set(false)});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!pop.hidden){set(false);pill.focus()}});
+  addEventListener("scroll",()=>{if(!pop.hidden&&scrollY>innerHeight*1.2)set(false)},{passive:true});
+})();
 
 /* ---------- Hero: Stoff glattbügeln ---------- */
 (function(){
@@ -1320,7 +1418,6 @@ renderHours();setInterval(renderHours,60000);onLang(renderHours);
   $("rClear").onclick=()=>{ALL.forEach(i=>i.q=0);touched=true;list();receipt()};
   $("rNo").textContent="Nr. "+String(1000+Math.floor(Math.random()*9000));
   const dateTxt=()=>{$("rDate").textContent=new Date().toLocaleDateString(LANG==="en"?"en-GB":"de-DE")};
-  ALL.find(i=>i.n==="Hemd").q=5;ALL.find(i=>i.n==="Anzug").q=1;
   drawChips();list();receipt();dateTxt();
   onLang(()=>{drawChips();list();receipt();dateTxt()});
 })();
